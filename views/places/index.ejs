@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="row">
+    <% if(locals.isAuthenticated) { %>
+      <a href="/places/new" class="btn btn-primary">Add</a>
+    <% } %>
+  </div>
+  <% places.forEach((place) => { %>
+    <div>
+      <a href="/places/<%= place.id %>"><h2><%= place.name %></h2></a>
+      <h3><%= place.region %></h3>
+      <p><% while(place.rating--) { %> &#10003; <% } %></p>
+      <p>Licence required:<%= place.licence %></p>
+      <p>Type: <%= place.keywords %></p>
+    </div>
+  <% }) %>
+</div>

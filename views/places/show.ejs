@@ -1,0 +1,11 @@
+<div class="container">
+  <div>
+      <h2><%= place.name %></h2>
+      <h3><%= place.region %></h3>
+      <p><% while(place.rating--) { %> &#10003; <% } %></p>
+      <p>Licence required:<%= place.licence %></p>
+      <p>Type: <%= place.keywords %></p>
+      <p><%= place.address %></p>
+      <p><%=place.description %></p>
+  </div>
+</div>

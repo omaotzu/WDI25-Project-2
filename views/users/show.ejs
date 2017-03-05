@@ -1,0 +1,9 @@
+<div class="container">
+  <h1><%= user.username %></h1>
+  <p><%= user.bio %></p>
+
+  <form method="POST" action="/profile">
+    <input type="hidden" name="_method" value="DELETE">
+    <button>Delete Account</button>
+  </form>
+</div>

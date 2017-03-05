@@ -1,9 +1,40 @@
 const router = require('express').Router();
 const registrations = require('../controllers/registrations');
 const sessions = require('../controllers/sessions');
+const users = require('../controllers/users');
+const places = require('../controllers/places');
 const secureRoute = require('../lib/secureRoute');
 
 router.get('/', (req, res) => res.render('statics/index'));
+
+
+router.route('/places')
+  .get(places.index)
+  .post(places.create);
+
+router.route('/places/new')
+  .get(places.new);
+
+router.route('/places/:id')
+  .get(places.show)
+  .put(places.update)
+  .delete(places.delete);
+
+router.route('/places/:id/edit')
+  .get(places.edit);
+
+
+
+
+
+router.route('/users/:id')
+  .get(users.show);
+
+router.route('/profile')
+  .get(registrations.show);
+
+router.route('/profile')
+  .delete(registrations.delete);
 
 router.route('/register')
   .get(registrations.new)
@@ -12,6 +43,9 @@ router.route('/register')
 router.route('/login')
   .get(sessions.new)
   .post(sessions.create);
+
+router.route('/logout')
+  .get(sessions.delete);
 
 
 router.all('*', (req, res) => res.notFound());
