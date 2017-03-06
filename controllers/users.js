@@ -12,7 +12,25 @@ function showRoute(req, res, next) {
     .catch(next);
 }
 
+function createImageRoute(req, res, next) {
+  if(req.file) req.body.filename = req.file.key;
+  req.body = Object.assign({}, req.body);
+  req.user.pics.push(req.body);
+  req.user
+    .save()
+    .then(() => res.redirect('/profile'))
+    .catch((err) => {
+      console.log(err);
+      if(err.name === 'ValidationError') return res.badRequest(`/users/${req.user.id}`, err.toString());
+      next(err);
+    });
+}
+
+
+
+
 
 module.exports = {
-  show: showRoute
+  show: showRoute,
+  createImage: createImageRoute
 };

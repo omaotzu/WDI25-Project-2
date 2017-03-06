@@ -3,6 +3,7 @@ const registrations = require('../controllers/registrations');
 const sessions = require('../controllers/sessions');
 const users = require('../controllers/users');
 const places = require('../controllers/places');
+const upload = require('../lib/upload');
 const secureRoute = require('../lib/secureRoute');
 
 router.get('/', (req, res) => res.render('statics/index'));
@@ -10,35 +11,43 @@ router.get('/', (req, res) => res.render('statics/index'));
 
 router.route('/places')
   .get(places.index)
-  .post(places.create);
+  .post(upload.single('image'), places.create);
 
 router.route('/places/new')
-  .get(places.new);
+  .get(secureRoute, places.new);
 
 router.route('/places/:id')
   .get(places.show)
-  .put(places.update)
-  .delete(places.delete);
+  .put(secureRoute, places.update)
+  .delete(secureRoute, places.delete);
 
 router.route('/places/:id/edit')
-  .get(places.edit);
+  .get(secureRoute, places.edit);
 
+router.route('/places/:id/images')
+  .post(secureRoute, upload.single('picture'), places.createImage);
 
+router.route('/places/:id/comments')
+  .post(secureRoute, places.createComment);
 
-
+router.route('/places/:id/comments/:commentId')
+  .delete(secureRoute, places.deleteComment);
 
 router.route('/users/:id')
   .get(users.show);
 
-router.route('/profile')
-  .get(registrations.show);
+router.route('/users/:id/images')
+  .post(secureRoute, upload.single('picture'), users.createImage);
 
 router.route('/profile')
-  .delete(registrations.delete);
+  .get(secureRoute, registrations.show)
+  .delete(secureRoute, registrations.delete);
+
+
 
 router.route('/register')
   .get(registrations.new)
-  .post(registrations.create);
+  .post(upload.single('image'), registrations.create);
 
 router.route('/login')
   .get(sessions.new)

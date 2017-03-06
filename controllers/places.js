@@ -15,7 +15,7 @@ function newRoute(req, res) {
 
 
 function createRoute(req, res, next) {
-  req.body.createdBy = req.user;
+  if(req.file) req.body.image = req.file.key;
   Place
    .create(req.body)
    .then(() => res.redirect('/places'))
@@ -28,7 +28,7 @@ function createRoute(req, res, next) {
 function showRoute(req, res, next) {
   Place
     .findById(req.params.id)
-    .populate('createdBy comments.createdBy')
+    .populate('createdBy pictures.createdBy')
     .exec()
     .then((place) => {
       if(!place) return res.notFound();
@@ -72,6 +72,42 @@ function updateRoute(req, res, next) {
       next(err);
     });
 }
+
+function createImageRoute(req, res, next) {
+  req.body.createdBy = req.user;
+  if(req.file) req.body.filename = req.file.key;
+  Place
+    .findById(req.params.id)
+    .populate('createdBy pictures.createdBy')
+    .exec()
+    .then((place)  => {
+      req.body = Object.assign({}, req.body);
+      place.pictures.push(req.body);
+      return place.save();
+    })
+    .then(() => res.redirect(`/places/${req.params.id}`))
+    .catch((err) => {
+      console.log(err);
+      if(err.name === 'ValidationError') return res.badRequest(`/places/${req.params.id}`, err.toString());
+      next(err);
+    });
+}
+
+function deleteImageRoute(req, res, next) {
+  if(req.file) req.body.filename = req.file.key;
+  Place
+    .findById(req.params.id)
+    .exec()
+    .then((place) => {
+      if(!place) return res.notFound();
+      const image = place.pictures.id(req.params.pictureId);
+      image.remove();
+      return place.save();
+    })
+    .then(() => res.redirect(`/places/${req.params.id}`))
+    .catch(next);
+}
+
 
 function deleteRoute(req, res, next) {
   req.body.createdBy = req.user;
@@ -128,6 +164,8 @@ module.exports = {
   edit: editRoute,
   update: updateRoute,
   delete: deleteRoute,
+  createImage: createImageRoute,
+  deleteImage: deleteImageRoute,
   createComment: createCommentRoute,
   deleteComment: deleteCommentRoute
 };

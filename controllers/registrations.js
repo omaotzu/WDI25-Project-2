@@ -5,15 +5,16 @@ function newRoute(req, res) {
 }
 
 function createRoute(req, res, next) {
+  if(req.file) req.body.image = req.file.key;
   User
     .create(req.body)
     .then(() => res.redirect('/login'))
     .catch((err) => {
       if(err.name === 'ValidationError') {
         req.flash('alert', 'Passwords do not match');
-        return res.redirect('/register');
+        return res.badRequest('/register', err.toString());
       }
-      next();
+      next(err);
     });
 }
 

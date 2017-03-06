@@ -8,6 +8,7 @@
     <div>
       <a href="/places/<%= place.id %>"><h2><%= place.name %></h2></a>
       <h3><%= place.region %></h3>
+      <img src="<%= place.imageSRC %>" alt="<%= place.name %>">
       <p><% while(place.rating--) { %> &#10003; <% } %></p>
       <p>Licence required:<%= place.licence %></p>
       <p>Type: <%= place.keywords %></p>

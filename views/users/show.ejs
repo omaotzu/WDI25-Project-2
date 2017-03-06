@@ -1,7 +1,40 @@
 <div class="container">
   <h1><%= user.username %></h1>
+  <img src= "<%= user.imageSRC %>" alt="<%= user.username %>">
   <p><%= user.bio %></p>
+</div>
 
+
+
+
+<div class="container">
+
+
+  <h2> Gallery</h2>
+  <form method="POST" action="/users/<%= user.id %>/images" enctype="multipart/form-data">
+    <div>
+      <label for="picture">Image file</label>
+      <input type="file" name="picture" id="picture">
+    </div>
+    <div>
+      <label for="caption">Caption</label>
+      <textarea name="caption" id="caption"></textarea>
+    </div>
+    <button>Add</button>
+  </form>
+
+
+  <div class="feed">
+    <% user.pics.forEach((image) => { %>
+      <img src="<%= image.src %>" alt="<%= image.caption %>">
+      <p><%= image.caption %></p>
+    <% }) %>
+  </div>
+
+</div>
+
+
+<div class="container">
   <form method="POST" action="/profile">
     <input type="hidden" name="_method" value="DELETE">
     <button>Delete Account</button>

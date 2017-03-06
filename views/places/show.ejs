@@ -2,10 +2,53 @@
   <div>
       <h2><%= place.name %></h2>
       <h3><%= place.region %></h3>
+      <img src="<%= place.imageSRC %>" alt="<%= place.name %>">
       <p><% while(place.rating--) { %> &#10003; <% } %></p>
       <p>Licence required:<%= place.licence %></p>
       <p>Type: <%= place.keywords %></p>
       <p><%= place.address %></p>
       <p><%=place.description %></p>
   </div>
+</div>
+
+<div class="container">
+  <h2>GALLERY</h2>
+  <form method="POST" action="/places/<%= place.id %>/images" enctype="multipart/form-data">
+    <div>
+      <label for="picture">Image file</label>
+      <input type="file" name="picture" id="picture">
+    </div>
+    <div>
+      <label for="caption">Caption</label>
+      <textarea name="caption" id="caption"></textarea>
+    </div>
+    <button>Add</button>
+  </form>
+
+  <div class="feed">
+    <% place.pictures.forEach((image) => { %>
+      <a href="/users/<%= image.createdBy._id %>"<small><%=image.createdBy.username %></small></a>
+      <img src="<%= image.picSRC %>" alt="<%= image.caption %>">
+      <p><%= image.caption %></p>
+    <% }) %>
+  </div>
+</div>
+
+
+<div class="container">
+  <h2>COMMENTS</h2>
+  <div class="feed">
+    <% place.comments.forEach((image) => { %>
+      <small><%=comment.createdBy.username %></small>
+      <p><%= comment.content %></p>
+    <% }) %>
+  </div>
+  <section>
+    <h4>Leave a comment</h4>
+    <form method="POST" action="/places/<%= place.id %>/comments">
+      <textarea name="content" id="content" placeholder="Comment"></textarea>
+      <button class="btn btn-primary">Leave a comment</button>
+    </form>
+  </section>
+
 </div>
