@@ -27,6 +27,12 @@ router.route('/places/:id/edit')
 router.route('/places/:id/images')
   .post(secureRoute, upload.single('picture'), places.createImage);
 
+router.route('/places/:id/images/:imageId')
+  .delete(secureRoute, places.deleteImage);
+
+// router.route('/places/:id/images/:imageId/comments')
+//   .post(secureRoute, places.createImageComment);
+
 router.route('/places/:id/comments')
   .post(secureRoute, places.createComment);
 
@@ -36,14 +42,16 @@ router.route('/places/:id/comments/:commentId')
 router.route('/users/:id')
   .get(users.show);
 
+
 router.route('/users/:id/images')
   .post(secureRoute, upload.single('picture'), users.createImage);
+
+router.route('/users/:id/images/:imageId')
+  .delete(secureRoute, users.deleteImage);
 
 router.route('/profile')
   .get(secureRoute, registrations.show)
   .delete(secureRoute, registrations.delete);
-
-
 
 router.route('/register')
   .get(registrations.new)

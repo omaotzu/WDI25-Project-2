@@ -6,7 +6,8 @@
       <p><% while(place.rating--) { %> &#10003; <% } %></p>
       <p>Licence required:<%= place.licence %></p>
       <p>Type: <%= place.keywords %></p>
-      <p><%= place.address %></p>
+      <p><%= place.streetName %> <%=place.postCode %></p>
+      <div id="map" data-place="<%= JSON.stringify(place) %>"></div>
       <p><%=place.description %></p>
   </div>
 </div>
@@ -30,6 +31,13 @@
       <a href="/users/<%= image.createdBy._id %>"<small><%=image.createdBy.username %></small></a>
       <img src="<%= image.picSRC %>" alt="<%= image.caption %>">
       <p><%= image.caption %></p>
+      <% if(locals.isAuthenticated && image.ownedBy(user)) { %>
+        <form method="POST" action="/places/<%=place.id%>/images/<%=image.id%>">
+          <input type="hidden" name="_method" value="DELETE">
+          <button class="btn btn-danger">Delete</button>
+        </form>
+      <% } %>
+
     <% }) %>
   </div>
 </div>
@@ -38,9 +46,15 @@
 <div class="container">
   <h2>COMMENTS</h2>
   <div class="feed">
-    <% place.comments.forEach((image) => { %>
+    <% place.comments.forEach((comment) => { %>
       <small><%=comment.createdBy.username %></small>
       <p><%= comment.content %></p>
+      <% if(locals.isAuthenticated && comment.writtenBy(user)) { %>
+        <form method="POST" action="/places/<%=place.id%>/comments/<%=comment.id%>">
+          <input type="hidden" name="_method" value="DELETE">
+          <button class="btn btn-danger">Delete</button>
+        </form>
+      <% } %>
     <% }) %>
   </div>
   <section>

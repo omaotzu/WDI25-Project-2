@@ -28,11 +28,12 @@ function createRoute(req, res, next) {
 function showRoute(req, res, next) {
   Place
     .findById(req.params.id)
-    .populate('createdBy pictures.createdBy')
+    .populate('pictures.createdBy comments.createdBy')
     .exec()
     .then((place) => {
       if(!place) return res.notFound();
-      return res.render('places/show', { place });
+      // const imageComments = place.pictures.icomments.id(req.params.icommentId);
+      return res.render('places/show', { place/*, imageComments */});
     })
     .catch(next);
 }
@@ -100,7 +101,7 @@ function deleteImageRoute(req, res, next) {
     .exec()
     .then((place) => {
       if(!place) return res.notFound();
-      const image = place.pictures.id(req.params.pictureId);
+      const image = place.pictures.id(req.params.imageId);
       image.remove();
       return place.save();
     })
@@ -155,6 +156,37 @@ function deleteCommentRoute(req, res, next) {
     .catch(next);
 }
 
+//
+// function createImageCommentRoute(req, res, next) {
+//   req.body.createdBy = req.user;
+//   Place
+//     .findById(req.params.id)
+//     .exec()
+//     .then((place) => {
+//       if(!place) return res.notFound();
+//       const imageComment = place.pictures.icomments.id(req.params.icommentId);
+//       place.pictures.icomments.push(imageComment);  ///create an embedded record to push then save the place not the comments
+//       return place.save();
+//     })
+//     .then((place) => res.redirect(`/places/${place.id}`))
+//     .catch(next);
+// }
+//
+//
+// function deleteImageCommentRoute(req, res, next) {
+//   Place
+//     .findById(req.params.id)
+//     .exec()
+//     .then((place) => {
+//       if(!place) return res.notFound();
+//       //get the embedded record by its id so we can delete it!!!!!
+//       const comment = place.pictures.icomments.id(req.params.icommentId);
+//       comment.remove();
+//       return place.save();
+//     })
+//     .then((place) => res.redirect(`/places/${place.id}`))
+//     .catch(next);
+// }
 
 module.exports = {
   index: indexRoute,
@@ -167,5 +199,7 @@ module.exports = {
   createImage: createImageRoute,
   deleteImage: deleteImageRoute,
   createComment: createCommentRoute,
-  deleteComment: deleteCommentRoute
+  deleteComment: deleteCommentRoute//,
+  // createImageComment: createImageCommentRoute,
+  // deleteImageComment: deleteImageCommentRoute
 };

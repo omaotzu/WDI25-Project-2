@@ -27,10 +27,24 @@ function createImageRoute(req, res, next) {
 }
 
 
-
+function deleteImageRoute(req, res, next) {
+  if(req.file) req.body.filename = req.file.key;
+  User
+    .findById(req.params.id)
+    .exec()
+    .then((user) => {
+      if(!user) return res.notFound();
+      const image = user.pics.id(req.params.imageId);
+      image.remove();
+      return user.save();
+    })
+    .then(() => res.redirect(`/users/${req.params.id}`))
+    .catch(next);
+}
 
 
 module.exports = {
   show: showRoute,
-  createImage: createImageRoute
+  createImage: createImageRoute,
+  deleteImage: deleteImageRoute
 };

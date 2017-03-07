@@ -28,6 +28,10 @@
     <% user.pics.forEach((image) => { %>
       <img src="<%= image.src %>" alt="<%= image.caption %>">
       <p><%= image.caption %></p>
+      <form method="POST" action="/users/<%=user.id%>/images/<%=image.id%>">
+        <input type="hidden" name="_method" value="DELETE">
+        <button class="btn btn-danger">Delete</button>
+      </form>
     <% }) %>
   </div>
 

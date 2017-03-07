@@ -1,9 +1,23 @@
 const mongoose = require('mongoose');
 const s3 = require('../lib/s3');
 
+
+const imageCommentSchema = new mongoose.Schema({
+  content: {type: String, required: true},
+  createdBy: {type: mongoose.Schema.ObjectId, ref: 'User', required: true}
+}, {
+  timestamps: true
+});
+imageCommentSchema.methods.addedBy = function addedBy(user) {
+  return this.createdBy.id === user.id;
+};
+
+
 const imageSchema = new mongoose.Schema({
   filename: { type: String },
   caption: { type: String },
+  icomments: [imageCommentSchema],
+  // icomments: ['one', 'two'],
   createdBy: {type: mongoose.Schema.ObjectId, ref: 'User', required: true}
 }, {
   timestamps: true
@@ -11,7 +25,6 @@ const imageSchema = new mongoose.Schema({
 imageSchema.methods.ownedBy = function ownedBy(user) {
   return this.createdBy.id === user.id;
 };
-
 
 const commentSchema = new mongoose.Schema({
   content: {type: String, required: true},
@@ -38,7 +51,8 @@ const placeSchema = new mongoose.Schema({
   keywords: {type: String, required: true},
   image: {type: String},
   price: {type: Number},
-  address: {type: String, required: true},
+  streetName: {type: String},
+  postCode: {type: String, required: true},
   description: {type: String, required: true},
   pictures: [imageSchema],
   comments: [commentSchema]
@@ -53,6 +67,10 @@ placeSchema
 
 placeSchema.pre('remove', function removeImage(next) {
   s3.deleteObject({Key: this.image}, next);
+});
+
+imageSchema.pre('remove', function removeImage(next) {
+  s3.deleteObject({Key: this.filename}, next);
 });
 
 
