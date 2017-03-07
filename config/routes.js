@@ -3,6 +3,7 @@ const registrations = require('../controllers/registrations');
 const sessions = require('../controllers/sessions');
 const users = require('../controllers/users');
 const places = require('../controllers/places');
+const oauth = require('../controllers/oauth');
 const upload = require('../lib/upload');
 const secureRoute = require('../lib/secureRoute');
 
@@ -63,6 +64,9 @@ router.route('/login')
 
 router.route('/logout')
   .get(sessions.delete);
+
+router.route('/oauth/github')
+  .get(oauth.github);
 
 
 router.all('*', (req, res) => res.notFound());

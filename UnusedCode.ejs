@@ -1,17 +1,27 @@
-// <section>
-//   <h4>Leave an image comment</h4>
-//   <form method="POST" action="/places/<%= place.id %>/images/<%=image.id%>/comments">
-//     <textarea name="content" id="content" placeholder="Comment"></textarea>
-//     <button class="btn btn-primary">Leave a comment</button>
-//   </form>
-// </section>
-//
-// <p>
-// <%= place %>
-// </p>
-// <p>
-// <%= place.pictures %>
-// </p>
-// <p>
-// <%= place.pictures.icomments %>
-// </p>
+<section>
+  <h4>Leave an image comment</h4>
+  <form method="POST" action="/places/<%= place.id %>/images/<%=image.id%>/comments">
+    <textarea name="content" id="content" placeholder="Comment"></textarea>
+    <button class="btn btn-primary">Leave a comment</button>
+  </form>
+</section>
+<p><%= place %></p>
+<p><%= place.pictures %></p>
+<p><%= place.pictures.icomments %></p>
+
+
+
+
+<div class="container">
+  <h3>Created Locations</3>
+  <% places.forEach((place) => { %>
+    <div>
+      <a href="/places/<%= place.id %>"><h2><%= place.name %></h2></a>
+      <h3><%= place.region %></h3>
+      <img src="<%= place.imageSRC %>" alt="<%= place.name %>">
+      <p><% while(place.rating--) { %> &#10003; <% } %></p>
+      <p>Licence required:<%= place.licence %></p>
+      <p>Type: <%= place.keywords %></p>
+    </div>
+  <% }) %>
+</div>

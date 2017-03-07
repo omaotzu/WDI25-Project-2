@@ -2,22 +2,22 @@ const mongoose = require('mongoose');
 const s3 = require('../lib/s3');
 
 
-const imageCommentSchema = new mongoose.Schema({
-  content: {type: String, required: true},
-  createdBy: {type: mongoose.Schema.ObjectId, ref: 'User', required: true}
-}, {
-  timestamps: true
-});
-imageCommentSchema.methods.addedBy = function addedBy(user) {
-  return this.createdBy.id === user.id;
-};
+// const imageCommentSchema = new mongoose.Schema({
+//   content: {type: String, required: true},
+//   createdBy: {type: mongoose.Schema.ObjectId, ref: 'User', required: true}
+// }, {
+//   timestamps: true
+// });
+// imageCommentSchema.methods.addedBy = function addedBy(user) {
+//   return this.createdBy.id === user.id;
+// };
+
 
 
 const imageSchema = new mongoose.Schema({
   filename: { type: String },
   caption: { type: String },
-  icomments: [imageCommentSchema],
-  // icomments: ['one', 'two'],
+  // icomments: [imageCommentSchema],
   createdBy: {type: mongoose.Schema.ObjectId, ref: 'User', required: true}
 }, {
   timestamps: true
@@ -26,13 +26,16 @@ imageSchema.methods.ownedBy = function ownedBy(user) {
   return this.createdBy.id === user.id;
 };
 
+
+
+
 const commentSchema = new mongoose.Schema({
   content: {type: String, required: true},
   createdBy: {type: mongoose.Schema.ObjectId, ref: 'User', required: true}
 }, {
   timestamps: true
 });
-commentSchema.methods.writtenBy = function writtendBy(user) {
+commentSchema.methods.writtenBy = function writtenBy(user) {
   return this.createdBy.id === user.id;
 };
 
@@ -55,8 +58,13 @@ const placeSchema = new mongoose.Schema({
   postCode: {type: String, required: true},
   description: {type: String, required: true},
   pictures: [imageSchema],
-  comments: [commentSchema]
+  comments: [commentSchema]//,
+  // createdBy: {type: mongoose.Schema.ObjectId, ref: 'User', required: true}
 });
+
+// placeSchema.methods.producedBy = function producedBy(user) {
+//   return this.createdBy.id === user.id;
+// };
 
 placeSchema
   .virtual('imageSRC')

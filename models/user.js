@@ -32,6 +32,7 @@ userSchema
   .virtual('imageSRC')
   .get(function getImageSRC() {
     if(!this.image) return null;
+    if(this.image.match(/^http/)) return (this.image);
     return `https://s3-eu-west-1.amazonaws.com/wdi-london-express-project2/${this.image}`;
   });
 
@@ -65,6 +66,7 @@ userSchema.methods.validatePassword = function validatePassword (password) {
 };
 
 userSchema.pre('remove', function removeImage(next) {
+  if(!this.image || this.image.match(/^http/)) return next();
   s3.deleteObject({ Key: this.image }, next);
 });
 

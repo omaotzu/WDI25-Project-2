@@ -12,19 +12,29 @@
   </div>
 </div>
 
+<div id="map_canvas" style="width:710px; height:300px"></div>
+    <form action="" id="routeForm">
+        <input type="text" id="routeStart" value="">
+        <input type="submit" value="Route Planner">
+    </form>
+<div id="directionsPanel"></div>
+
+
 <div class="container">
   <h2>GALLERY</h2>
-  <form method="POST" action="/places/<%= place.id %>/images" enctype="multipart/form-data">
-    <div>
-      <label for="picture">Image file</label>
-      <input type="file" name="picture" id="picture">
-    </div>
-    <div>
-      <label for="caption">Caption</label>
-      <textarea name="caption" id="caption"></textarea>
-    </div>
-    <button>Add</button>
-  </form>
+  <% if(locals.isAuthenticated) { %>
+    <form method="POST" action="/places/<%= place.id %>/images" enctype="multipart/form-data">
+      <div>
+        <label for="picture">Image file</label>
+        <input type="file" name="picture" id="picture">
+      </div>
+      <div>
+        <label for="caption">Caption</label>
+        <textarea name="caption" id="caption"></textarea>
+      </div>
+      <button>Add</button>
+    </form>
+  <% } %>
 
   <div class="feed">
     <% place.pictures.forEach((image) => { %>
@@ -58,11 +68,12 @@
     <% }) %>
   </div>
   <section>
-    <h4>Leave a comment</h4>
-    <form method="POST" action="/places/<%= place.id %>/comments">
-      <textarea name="content" id="content" placeholder="Comment"></textarea>
-      <button class="btn btn-primary">Leave a comment</button>
-    </form>
+    <% if(locals.isAuthenticated) { %>
+      <h4>Leave a comment</h4>
+      <form method="POST" action="/places/<%= place.id %>/comments">
+        <textarea name="content" id="content" placeholder="Comment"></textarea>
+        <button class="btn btn-primary">Leave a comment</button>
+      </form>
+    <% } %>
   </section>
-
 </div>

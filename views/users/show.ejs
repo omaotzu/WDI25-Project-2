@@ -8,8 +8,6 @@
 
 
 <div class="container">
-
-
   <h2> Gallery</h2>
   <form method="POST" action="/users/<%= user.id %>/images" enctype="multipart/form-data">
     <div>
@@ -34,13 +32,15 @@
       </form>
     <% }) %>
   </div>
-
 </div>
 
-
 <div class="container">
-  <form method="POST" action="/profile">
-    <input type="hidden" name="_method" value="DELETE">
-    <button>Delete Account</button>
-  </form>
+  <% if(locals.isAuthenticated) { %>
+    <div class="container">
+      <form method="POST" action="/profile">
+        <input type="hidden" name="_method" value="DELETE">
+        <button>Delete Account</button>
+      </form>
+    </div>
+  <% } %>
 </div>
