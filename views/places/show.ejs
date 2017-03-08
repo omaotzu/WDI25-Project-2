@@ -7,18 +7,16 @@
       <p>Licence required:<%= place.licence %></p>
       <p>Type: <%= place.keywords %></p>
       <p><%= place.streetName %> <%=place.postCode %></p>
-      <div id="map" data-place="<%= JSON.stringify(place) %>"></div>
       <p><%=place.description %></p>
   </div>
 </div>
-
-<div id="map_canvas" style="width:710px; height:300px"></div>
+<div class="container">
+<div id="map_canvas" class="map" data-place="<%= JSON.stringify(place) %>"></div>
     <form action="" id="routeForm">
-        <input type="text" id="routeStart" value="">
-        <input type="submit" value="Route Planner">
+        <input type="submit" value="Navigate!">
     </form>
 <div id="directionsPanel"></div>
-
+</div>
 
 <div class="container">
   <h2>GALLERY</h2>

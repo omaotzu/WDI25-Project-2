@@ -156,6 +156,18 @@ function deleteCommentRoute(req, res, next) {
     .catch(next);
 }
 
+
+function showTripPlanner(req, res, next) {
+  Place
+    .findById(req.params.id)
+    .exec()
+    .then((place) => {
+      if(!place) return res.notFound();
+      // const imageComments = place.pictures.icomments.id(req.params.icommentId);
+      return res.render('places/trip_planner', { place/*, imageComments */});
+    })
+    .catch(next);
+}
 //
 // function createImageCommentRoute(req, res, next) {
 //   req.body.createdBy = req.user;
@@ -199,7 +211,8 @@ module.exports = {
   createImage: createImageRoute,
   deleteImage: deleteImageRoute,
   createComment: createCommentRoute,
-  deleteComment: deleteCommentRoute//,
+  deleteComment: deleteCommentRoute,
+  tripPlanner: showTripPlanner
   // createImageComment: createImageCommentRoute,
   // deleteImageComment: deleteImageCommentRoute
 };

@@ -10,8 +10,6 @@
 <p><%= place.pictures.icomments %></p>
 
 
-
-
 <div class="container">
   <h3>Created Locations</3>
   <% places.forEach((place) => { %>
@@ -25,3 +23,5 @@
     </div>
   <% }) %>
 </div>
+
+<div id="map" data-place="<%= JSON.stringify(place) %>"></div>
