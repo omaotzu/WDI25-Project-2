@@ -8,14 +8,8 @@
       <p>Type: <%= place.keywords %></p>
       <p><%= place.streetName %> <%=place.postCode %></p>
       <p><%=place.description %></p>
+      <a href="/places/<%= place.id %>/tripPlanner"><button class='btn btn-primary' id="planTrip">Plan a trip</button></a>
   </div>
-</div>
-<div class="container">
-<div id="map_canvas" class="map" data-place="<%= JSON.stringify(place) %>"></div>
-    <form action="" id="routeForm">
-        <input type="submit" value="Navigate!">
-    </form>
-<div id="directionsPanel"></div>
 </div>
 
 <div class="container">

@@ -1,19 +1,25 @@
 'use strict';
 
 /* global google: true */
+
 $(function () {
   console.log('JSTING');
 
-  var place = $('.map').data('place');
-  // console.log(place);
-  // console.log(place.name + ' ' + place.postCode);
+  var tripPlan = $('.tripPlan').data('place');
+  // const minimap = $('#map').data('place');
 
-  // $('.find').on('click', addAddress);
+
+  // console.log('Small Map');
+  // console.log(minimap);
+  // console.log(minimap.name + ' ' + minimap.postCode);
+  // console.log('Journey planner');
+  // console.log(tripPlan);
+  // console.log(tripPlan.name + ' ' + tripPlan.postCode);
 
   //--------------Show page map display ---------------------------------------- //
-  //
+
   // function makeMap() {
-  //   var address = place.postCode;
+  //   var address = minimap.postCode;
   //   var geocoder = new google.maps.Geocoder();
   //   geocoder.geocode({ 'address': address}, function(results, status) {
   //     if (status === google.maps.GeocoderStatus.OK) {
@@ -35,11 +41,12 @@ $(function () {
 
   //----------------------Route planner ---------------------------------------------//
 
+
   var directionsDisplay = null;
   var directionsService = new google.maps.DirectionsService();
 
   function initialize() {
-    var address = place.postCode;
+    var address = tripPlan.postCode;
     var geocoder = new google.maps.Geocoder();
     directionsDisplay = new google.maps.DirectionsRenderer();
     geocoder.geocode({ 'address': address }, function (results, status) {
@@ -65,7 +72,7 @@ $(function () {
 
   function calcRoute(e) {
     e.preventDefault();
-    var address = place.postCode;
+    var address = tripPlan.postCode;
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({ 'address': address }, function (results, status) {
       if (status === google.maps.GeocoderStatus.OK) {
@@ -103,6 +110,8 @@ $(function () {
   //   currentLocationWindow.setPosition(pos);
   //   currentLocationWindow.setContent(browserHasGeolocation ? 'Error: The Geolocation service failed.' : 'Error: Your browser doesn\'t support geolocation.');
 
+
   initialize();
+  // $('#planTrip').on('click',initialize);
   $('#routeForm').on('submit', calcRoute);
 });
