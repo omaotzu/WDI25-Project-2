@@ -7,7 +7,7 @@
           <li><a href="/">FishBook</a></li>
           <li><a href="/places">Locations</a></li>
           <% if(locals.isAuthenticated) { %>
-            <li><a href="/profile">Profile</a></li>
+            <li><a href="/users/<%=user.id%>">Profile</a></li>
             <li><a href="/places/new">Add New Location</a></li>
             <li><a href="/logout">Logout</a></li>
           <% } else { %>

@@ -18,10 +18,6 @@ function createRoute(req, res, next) {
     });
 }
 
-function showRoute(req, res) {
-  return res.render('users/show');
-}
-
 function deleteRoute(req, res, next) {
   req.user
     .remove()
@@ -34,6 +30,5 @@ function deleteRoute(req, res, next) {
 module.exports = {
   new: newRoute,
   create: createRoute,
-  show: showRoute,
   delete: deleteRoute
 };

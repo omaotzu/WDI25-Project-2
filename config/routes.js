@@ -48,10 +48,14 @@ router.route('/places/:id/comments/:commentId')
 
 
 //-------------------------------Sessions ------------------------------------//
-
+  
 router.route('/users/:id')
-  .get(users.show);
+  .get(users.show)
+  .put(secureRoute, users.update);
 
+
+router.route('/users/:id/edit')
+  .get(users.edit);
 
 router.route('/users/:id/images')
   .post(secureRoute, upload.single('picture'), users.createImage);
@@ -63,7 +67,6 @@ router.route('/oauth/github')
   .get(oauth.github);
 //---------------------------Registrations -----------------------------------//
 router.route('/profile')
-  .get(secureRoute, registrations.show)
   .delete(secureRoute, registrations.delete);
 
 router.route('/register')
