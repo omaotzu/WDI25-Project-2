@@ -1,5 +1,6 @@
 const User = require('../models/user');
-
+const Promise = require('bluebird');
+const s3 = Promise.promisifyAll(require('../lib/s3'));
 
 function showRoute(req, res, next) {
   User
@@ -30,16 +31,23 @@ function editRoute(req, res, next) {
 }
 
 function updateRoute(req, res, next) {
+  if (req.file) req.body.image = req.file.key;
   User
     .findById(req.params.id)
-    .exec()
+    .then((user) => {
+      if(user.image && req.file) {
+        s3.removeObjectAsync({Key: user.image}).then(() => {
+          return user;
+        });
+      }else {
+        return user;
+      }
+    })
     .then((user) => {
       if(!user) return res.notFound();
-
       for(const field in req.body) {
         user[field] = req.body[field];
       }
-
       return user.save();
     })
     .then((user) => res.redirect(`/users/${user.id}`))

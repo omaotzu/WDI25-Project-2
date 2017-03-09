@@ -1,17 +1,26 @@
 <div class="container">
-  <div class="row">
+  <div class="row addButton">
     <% if(locals.isAuthenticated) { %>
-      <a href="/places/new" class="btn btn-primary">Add</a>
+      <a href="/places/new" class="btn indexButtonColour">Add</a>
     <% } %>
   </div>
-  <% places.forEach((place) => { %>
-    <div>
-      <a href="/places/<%= place.id %>"><h2><%= place.name %></h2></a>
-      <h3><%= place.region %></h3>
-      <img src="<%= place.imageSRC %>" alt="<%= place.name %>">
-      <p><% while(place.rating--) { %> &#10003; <% } %></p>
-      <p>Licence required:<%= place.licence %></p>
-      <p>Type: <%= place.keywords %></p>
-    </div>
-  <% }) %>
+<div>
+<div class="container">
+  <div class="row">
+    <% places.forEach((place) => { %>
+      <div class="col col-md-6 indexCard" >
+        <div class="card cardRadius">
+          <img class="card-img-top indexPic" src="<%= place.imageSRC %>" alt="<%= place.name %>">
+          <div class="card-block cardColour">
+            <h2 class="card-title middle name"><%= place.name %></h2>
+            <h3 class="middle"><%= place.region %></h3>
+            <p class= "rating middle"><% while(place.rating--) { %> &star; <% } %></p>
+            <p>Licence required:<%= place.licence %></p>
+            <p>Type: <%= place.keywords %></p>
+            <p class= "middle"><a href="/places/<%= place.id %>" class="btn altButtonColour">Check it out</a><p>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
 </div>

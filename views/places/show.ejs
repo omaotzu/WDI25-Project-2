@@ -1,70 +1,136 @@
-<div class="container">
-  <div>
-      <h2><%= place.name %></h2>
-      <h3><%= place.region %></h3>
-      <img src="<%= place.imageSRC %>" alt="<%= place.name %>">
-      <p><% while(place.rating--) { %> &#10003; <% } %></p>
+<div class="container showPage">
+  <div class="row coverPhoto">
+    <img src="<%= place.imageSRC %>" alt="<%= place.name %>" class="coverPhotoImage">
+  </div>
+  <div class="row showLocation">
+    <h2><%= place.name %></h2>
+  </div>
+  <div class="row showLocation">
+    <h3><%= place.region %></h3>
+  </div>
+  <div class ="row rating">
+    <p><% while(place.rating--) { %> &#10003; <% } %></p>
+  </div>
+  <div class = "row">
+    <div class="col col-md-8 showInfo">
       <p>Licence required:<%= place.licence %></p>
       <p>Type: <%= place.keywords %></p>
-      <p><%= place.streetName %> <%=place.postCode %></p>
       <p><%=place.description %></p>
-      <a href="/places/<%= place.id %>/tripPlanner"><button class='btn btn-primary' id="planTrip">Plan a trip</button></a>
+      <a href="/places/<%= place.id %>/edit" class="btn greenButtonColour">Edit</a>
+    </div>
+    <div class="col col-md-4 showAddress">
+      <p><%= place.telephone %></p>
+      <p><%= place.address %> <%=place.postCode %></p>
+      <a href="/places/<%= place.id %>/tripPlanner"class='btn altButtonColour' id="planTrip">Plan a trip</a>
+    </div>
   </div>
 </div>
 
-<div class="container">
-  <h2>GALLERY</h2>
-  <% if(locals.isAuthenticated) { %>
-    <form method="POST" action="/places/<%= place.id %>/images" enctype="multipart/form-data">
-      <div>
-        <label for="picture">Image file</label>
-        <input type="file" name="picture" id="picture">
+<div class="container showPage">
+  <div class="row showGalleryTitle">
+    <div class="col col-md-4 galleryHead">
+      <h2>GALLERY</h2>
+    </div>
+    <div class="col col-md-8 showImageUpload">
+      <div class="row">
+        <% if(locals.isAuthenticated) { %>
+          <h3 class="middle">Add an image</h3>
+        </div>
+        <div class="row">
+          <form method="POST" action="/places/<%= place.id %>/images" enctype="multipart/form-data">
+            <div class="row">
+              <div class="col col-md-6">
+                <label for="caption"></label>
+                <textarea name="caption" id="caption" placeholder="Insert a caption"></textarea>
+              </div>
+              <div class="col col-md-6">
+                <label for="picture"></label>
+                <input type="file" name="picture" id="picture" >
+              </div>
+            </div>
+            <button class="btn greenButtonColour">Add</button>
+          </form>
+        <% } else { %>
+            <h4 class="showAddress">Please login to add images</h4>
+        <% } %>
       </div>
-      <div>
-        <label for="caption">Caption</label>
-        <textarea name="caption" id="caption"></textarea>
-      </div>
-      <button>Add</button>
-    </form>
-  <% } %>
-
-  <div class="feed">
+    </div>
+  </div>
+  <div class="row">
     <% place.pictures.forEach((image) => { %>
-      <a href="/users/<%= image.createdBy._id %>"<small><%=image.createdBy.username %></small></a>
-      <img src="<%= image.picSRC %>" alt="<%= image.caption %>">
-      <p><%= image.caption %></p>
-      <% if(locals.isAuthenticated && image.ownedBy(user)) { %>
-        <form method="POST" action="/places/<%=place.id%>/images/<%=image.id%>">
-          <input type="hidden" name="_method" value="DELETE">
-          <button class="btn btn-danger">Delete</button>
-        </form>
-      <% } %>
+      <div class="col-lg-4 col-sm-6">
+        <img src="<%= image.picSRC %>" alt="<%= image.caption %>" class="img-fluid img-thumbnail" data-toggle="modal" data-target="#<%=image.id%>">
+      </div>
 
+      <div class="modal fade" id="<%=image.id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <a href="/users/<%= image.createdBy._id %>"><small><%=image.createdBy.username %></small></a>
+            </div>
+            <div class="modal-body">
+              <img src="<%= image.picSRC %>" alt="<%= image.caption %>" class="img-fluid">
+              <p><%= image.caption %></p>
+              <% if(locals.isAuthenticated && image.ownedBy(user)) { %>
+                <form method="POST" action="/places/<%=place.id%>/images/<%=image.id%>">
+                  <input type="hidden" name="_method" value="DELETE">
+                  <button class="btn redButtonColour">Delete</button>
+                </form>
+              <% } %>
+              <% if(locals.isAuthenticated) { %>
+                <h3>Leave an image comment</h3>
+                <form method="POST" action="/places/<%= place.id %>/images/<%=image.id%>/comments">
+                  <textarea name="content" id="content" placeholder="Comment"></textarea>
+                  <button class="btn blueButtonColour">Leave a comment</button>
+                </form>
+              <% } %>
+              <% image.icomments.forEach((icomment) => { %>
+                <a href="/users/<%= icomment.createdBy._id %>"><small><%=icomment.createdBy.username %></small></a>
+                <p><%= icomment.content %></p>
+                <% if(locals.isAuthenticated && icomment.writtenBy(user)) { %>
+                  <form method="POST" action="/places/<%= place.id %>/images/<%=image.id%>/comments/<%=icomment.id%>">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button class="btn redButtonColour">Delete</button>
+                  </form>
+                <% } %>
+              <% }) %>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
     <% }) %>
   </div>
 </div>
 
 
-<div class="container">
-  <h2>COMMENTS</h2>
+
+
+
+<div class="container showPage">
+  <h2 class="showPageCommentTitle">Reviews</h2>
   <div class="feed">
     <% place.comments.forEach((comment) => { %>
-      <small><%=comment.createdBy.username %></small>
-      <p><%= comment.content %></p>
-      <% if(locals.isAuthenticated && comment.writtenBy(user)) { %>
-        <form method="POST" action="/places/<%=place.id%>/comments/<%=comment.id%>">
-          <input type="hidden" name="_method" value="DELETE">
-          <button class="btn btn-danger">Delete</button>
-        </form>
-      <% } %>
+      <div class="showPageComment">
+        <a href="/users/<%= comment.createdBy._id %>"><small><%=comment.createdBy.username %></small></a>
+        <p><%= comment.content %></p>
+        <% if(locals.isAuthenticated && comment.writtenBy(user)) { %>
+          <form method="POST" action="/places/<%=place.id%>/comments/<%=comment.id%>">
+            <input type="hidden" name="_method" value="DELETE">
+            <button class="btn redButtonColour">Delete</button>
+          </form>
+        <% } %>
+      </div>
     <% }) %>
   </div>
-  <section>
+  <section class="form-group">
     <% if(locals.isAuthenticated) { %>
-      <h4>Leave a comment</h4>
+      <h3 class="showPageCommentTitle">Leave a review</h3>
       <form method="POST" action="/places/<%= place.id %>/comments">
-        <textarea name="content" id="content" placeholder="Comment"></textarea>
-        <button class="btn btn-primary">Leave a comment</button>
+        <textarea name="content" id="content" placeholder="Comment" class="form-control"></textarea>
+        <button class="btn blueButtonColour">Leave a comment</button>
       </form>
     <% } %>
   </section>

@@ -1,15 +1,23 @@
 /* global google: true */
 
 
-
-
-
 $(function () {
   console.log('JSTING');
 
   const tripPlan = $('.tripPlan').data('place');
-  // const minimap = $('#map').data('place');
 
+
+  const $input = $('.autocomplete');
+  const autocomplete = new google.maps.places.Autocomplete($input[0]);
+  const $lat = $('input[name=lat]');
+  const $lng = $('input[name=lng]');
+
+  autocomplete.addListener('place_changed', () => {
+    const place = autocomplete.getPlace();
+    const location = place.geometry.location.toJSON();
+    $lat.val(location.lat);
+    $lng.val(location.lng);
+  });
 
   // console.log('Small Map');
   // console.log(minimap);
@@ -115,9 +123,38 @@ $(function () {
     //   currentLocationWindow.setPosition(pos);
     //   currentLocationWindow.setContent(browserHasGeolocation ? 'Error: The Geolocation service failed.' : 'Error: Your browser doesn\'t support geolocation.');
 
+  function getWeather(){
+    $('ul#info').empty();
+    $.get(`http://api.wunderground.com/api/e32e9863eea8648e/conditions/geolookup/q/${tripPlan.lat},${tripPlan.lng}.json`)
+    .done((data) => {
+      $('ul#info').prepend(`
+        <li> Current temperature - <em>${data.current_observation.temp_c}&deg;C</em></li>
+        <li> Real feel           - <em>${data.current_observation.feelslike_c}&deg;C</em></li>
+        <li> Current weather     - <em>${data.current_observation.weather}</em></li>
+        <li> Visibility          - <em>${data.current_observation.visibility_mi} Miles</em></li>
+        <li> Windspeed           - <em>${data.current_observation.wind_mph} Mph</em></li>
+        <li> For more weather info - <a href ="${data.current_observation.forecast_url}">Click Here!!</a></li>
+      `);
+    });
+  }
 
-  initialize();
-  // $('#planTrip').on('click',initialize);
+  $(document).ready(function () {
+    if(window.location.href.indexOf('tripPlanner') > -1) {
+      initialize();
+      getWeather();
+    }
+  });
+
+  // $.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${tripPlan.lat},${tripPlan.lng}&radius=2000&type=hotel&key=AIzaSyAqunPN56wSjv3kna8IT0805pIX3f4fB3c.json`)
+  //   .done((data) => console.log(data));
+
+  // $.get(`http://api.wunderground.com/api/e32e9863eea8648e/conditions/geolookup/q/${tripPlan.lat},${tripPlan.lng}.json`)
+  //   // .done((data) => console.log(data));
+  //   // .done((data) => console.log(data.current_observation));
+  //   // .done((data) => console.log(data.current_observation.temp_c))
+  //   .done((data) => console.log(data.current_observation.forecast_url));
+
   $('#routeForm').on('submit', calcRoute);
+
 
 });

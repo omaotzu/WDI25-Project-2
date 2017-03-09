@@ -1,55 +1,77 @@
-<div class="container">
-  <h1><%= thisUser.username %></h1>
-  <img src= "<%= thisUser.imageSRC %>" alt="<%= thisUser.username %>">
-  <p><%= thisUser.bio %></p>
+<div class="container profileTitle">
 </div>
-
-
-
-
-<div class="container">
-  <h2> Gallery</h2>
-  <% if(locals.isAuthenticated && (thisUser.id == user.id)) { %>
-    <form method="POST" action="/users/<%= thisUser.id %>/images" enctype="multipart/form-data">
-      <div>
-        <label for="picture">Image file</label>
-        <input type="file" name="picture" id="picture">
-      </div>
-      <div>
-        <label for="caption">Caption</label>
-        <textarea name="caption" id="caption"></textarea>
-      </div>
-      <button>Add</button>
-    </form>
-  <% } %>
-
-  <div class="feed">
-    <% thisUser.pics.forEach((image) => { %>
-      <img src="<%= image.src %>" alt="<%= image.caption %>">
-      <p><%= image.caption %></p>
+<div class="container profileInfo">
+  <div class="row">
+    <div class="col col-md-6">
+      <img src= "<%= thisUser.imageSRC %>" alt="<%= thisUser.username %>">
+    </div>
+    <div class="col col-md-6">
+      <h2><%= thisUser.username %></h2>
+      <p><%= thisUser.firstName %> <%=thisUser.lastName %></p>
+      <h6>About me: </h6>
+      <p><%= thisUser.bio %></p>
       <% if(locals.isAuthenticated && (thisUser.id == user.id)) { %>
-        <form method="POST" action="/users/<%=thisUser.id%>/images/<%=image.id%>">
+        <a href="/users/<%= thisUser.id %>/edit" class="btn">Edit</a>
+        <form method="POST" action="/profile">
           <input type="hidden" name="_method" value="DELETE">
-          <button class="btn btn-danger">Delete</button>
+          <br>
+          <button class="btn">Delete Account</button>
         </form>
       <% } %>
-    <% }) %>
+    </div>
   </div>
 </div>
 
-
-
-
 <div class="container">
-  <% if(locals.isAuthenticated && (thisUser.id == user.id)) { %>
-    <div class="container">
-
-
-      <a href="/users/<%= thisUser.id %>/edit" class="btn btn-success">Edit</a>
-      <form method="POST" action="/profile">
-        <input type="hidden" name="_method" value="DELETE">
-        <button>Delete Account</button>
-      </form>
+  <h2> Gallery</h2>
+  <div class="row">
+    <div class="col col-md-4">
+      <% if(locals.isAuthenticated && (thisUser.id == user.id)) { %>
+        <form method="POST" action="/users/<%= thisUser.id %>/images" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="picture">Image file - Click box below to upload!</label>
+            <div class="fileBox">
+              <input type="file" name="picture" id="picture" class="form-control seeThrough">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="caption">Caption</label>
+            <textarea name="caption" id="caption" class="form-control"></textarea>
+          </div>
+          <button>Add</button>
+        </form>
+      <% } %>
     </div>
-  <% } %>
+    <div class="col col-md-8">
+      <div class="row">
+        <% thisUser.pics.forEach((image) => { %>
+          <div class="col-lg-4 col-md-4 col-sm-6">
+            <img src="<%= image.src %>" alt="<%= image.caption %>" class="img-fluid img-thumbnail" data-toggle="modal" data-target="#<%=image.id%>">
+          </div>
+          <div class="modal fade" id="<%=image.id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+
+                </div>
+                <div class="modal-body">
+                  <img src="<%= image.src %>" alt="<%= image.caption %>" class="img-fluid">
+                  <p><%= image.caption %></p>
+                  <% if(locals.isAuthenticated && (thisUser.id == user.id)) { %>
+                    <form method="POST" action="/users/<%=thisUser.id%>/images/<%=image.id%>">
+                      <input type="hidden" name="_method" value="DELETE">
+                      <button class="btn">Delete</button>
+                    </form>
+                  <% } %>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
 </div>

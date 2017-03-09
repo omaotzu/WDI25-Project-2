@@ -25,10 +25,12 @@ function createRoute(req, res, next) {
    });
 }
 
+
+
 function showRoute(req, res, next) {
   Place
     .findById(req.params.id)
-    .populate('pictures.createdBy comments.createdBy')
+    .populate('pictures.createdBy comments.createdBy pictures.icomments.createdBy')
     .exec()
     .then((place) => {
       if(!place) return res.notFound();
@@ -44,11 +46,11 @@ function editRoute(req, res, next) {
     .findById(req.params.id)
     .exec()
     .then((place) => {
-      if (req.user.id === place.createdBy.toString()) {
-        return res.render('places/edit', { place });
-      } else {
-        req.flash('alert', 'You must own this place');
+      if(!place) {
+        req.flash('alert', 'You must own this profile');
         return res.redirect(`/places/${place.id}`);
+      } else {
+        res.render('places/edit', { place });
       }
     })
     .catch(next);
@@ -64,7 +66,6 @@ function updateRoute(req, res, next) {
       for(const field in req.body) {
         place[field] = req.body[field];
       }
-
       return place.save();
     })
     .then(() => res.redirect(`/places/${req.params.id}`))
@@ -124,6 +125,7 @@ function deleteRoute(req, res, next) {
 }
 
 
+
 function createCommentRoute(req, res, next) {
 
   req.body.createdBy = req.user;
@@ -163,42 +165,45 @@ function showTripPlanner(req, res, next) {
     .exec()
     .then((place) => {
       if(!place) return res.notFound();
-      // const imageComments = place.pictures.icomments.id(req.params.icommentId);
-      return res.render('places/trip_planner', { place/*, imageComments */});
+
+      return res.render('places/tripPlanner', { place });
     })
     .catch(next);
 }
-//
-// function createImageCommentRoute(req, res, next) {
-//   req.body.createdBy = req.user;
-//   Place
-//     .findById(req.params.id)
-//     .exec()
-//     .then((place) => {
-//       if(!place) return res.notFound();
-//       const imageComment = place.pictures.icomments.id(req.params.icommentId);
-//       place.pictures.icomments.push(imageComment);  ///create an embedded record to push then save the place not the comments
-//       return place.save();
-//     })
-//     .then((place) => res.redirect(`/places/${place.id}`))
-//     .catch(next);
-// }
-//
-//
-// function deleteImageCommentRoute(req, res, next) {
-//   Place
-//     .findById(req.params.id)
-//     .exec()
-//     .then((place) => {
-//       if(!place) return res.notFound();
-//       //get the embedded record by its id so we can delete it!!!!!
-//       const comment = place.pictures.icomments.id(req.params.icommentId);
-//       comment.remove();
-//       return place.save();
-//     })
-//     .then((place) => res.redirect(`/places/${place.id}`))
-//     .catch(next);
-// }
+
+
+function createImageCommentRoute(req, res, next) {
+  req.body.createdBy = req.user;
+  Place
+    .findById(req.params.id)
+    .exec()
+    .then((place) => {
+      if(!place) return res.notFound();
+      const picture = place.pictures.id(req.params.imageId);
+      console.log(req.params.imageId);
+      picture.icomments.push(req.body);
+
+      return place.save();
+    })
+    .then((place) => res.redirect(`/places/${place.id}`))
+    .catch(next);
+}
+
+
+function deleteImageCommentRoute(req, res, next) {
+  Place
+    .findById(req.params.id)
+    .exec()
+    .then((place) => {
+      if(!place) return res.notFound();
+      const picture = place.pictures.id(req.params.imageId);
+      const comment = picture.icomments.id(req.params.commentId);
+      comment.remove();
+      return place.save();
+    })
+    .then((place) => res.redirect(`/places/${place.id}`))
+    .catch(next);
+}
 
 module.exports = {
   index: indexRoute,
@@ -212,7 +217,7 @@ module.exports = {
   deleteImage: deleteImageRoute,
   createComment: createCommentRoute,
   deleteComment: deleteCommentRoute,
-  tripPlanner: showTripPlanner
-  // createImageComment: createImageCommentRoute,
-  // deleteImageComment: deleteImageCommentRoute
+  tripPlanner: showTripPlanner,
+  createImageComment: createImageCommentRoute,
+  deleteImageComment: deleteImageCommentRoute
 };

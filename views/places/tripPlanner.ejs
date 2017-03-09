@@ -1,0 +1,27 @@
+<div class="container tripPlannerHeader">
+  <h2>Plan a trip</h2>
+</div>
+
+<div class="container">
+  <h4>Current Weather Conditions</h4>
+  <div class="row">
+    <div class="col col-md-6">
+      <ul id="info">
+      </ul>
+    </div>
+    <div class="col col-md-6">
+      <p>Weather information has been provided by:</p>
+      <div class="wunder">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div id="map_canvas" class="tripPlan" data-place="<%= JSON.stringify(place) %>"></div>
+      <form action="" id="routeForm">
+          <input type="submit" value="Navigate!">
+      </form>
+  <div id="directionsPanel"></div>
+</div>

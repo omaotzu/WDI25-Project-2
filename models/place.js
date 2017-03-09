@@ -2,22 +2,22 @@ const mongoose = require('mongoose');
 const s3 = require('../lib/s3');
 
 
-// const imageCommentSchema = new mongoose.Schema({
-//   content: {type: String, required: true},
-//   createdBy: {type: mongoose.Schema.ObjectId, ref: 'User', required: true}
-// }, {
-//   timestamps: true
-// });
-// imageCommentSchema.methods.addedBy = function addedBy(user) {
-//   return this.createdBy.id === user.id;
-// };
+const imageCommentSchema = new mongoose.Schema({
+  content: {type: String, required: true},
+  createdBy: {type: mongoose.Schema.ObjectId, ref: 'User', required: true}
+}, {
+  timestamps: true
+});
 
+imageCommentSchema.methods.writtenBy = function writtenBy(user) {
+  return this.createdBy.id === user.id;
+};
 
 
 const imageSchema = new mongoose.Schema({
   filename: { type: String },
   caption: { type: String },
-  // icomments: [imageCommentSchema],
+  icomments: [imageCommentSchema],
   createdBy: {type: mongoose.Schema.ObjectId, ref: 'User', required: true}
 }, {
   timestamps: true
@@ -47,24 +47,22 @@ imageSchema.virtual('picSRC')
 
 
 const placeSchema = new mongoose.Schema({
-  name: {type: String, required: true},
+  name: {type: String},
   region: {type: String, required: true},
   licence: {type: String},
   rating: {type: Number, required: true},
-  keywords: {type: String, required: true},
+  keywords: {type: String},
   image: {type: String},
   price: {type: Number},
-  streetName: {type: String},
+  address: {type: String, required: true},
   postCode: {type: String, required: true},
+  lat: {type: String},
+  lng: {type: String},
+  telephone: {type: String},
   description: {type: String, required: true},
   pictures: [imageSchema],
-  comments: [commentSchema]//,
-  // createdBy: {type: mongoose.Schema.ObjectId, ref: 'User', required: true}
+  comments: [commentSchema]
 });
-
-// placeSchema.methods.producedBy = function producedBy(user) {
-//   return this.createdBy.id === user.id;
-// };
 
 placeSchema
   .virtual('imageSRC')

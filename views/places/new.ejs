@@ -1,45 +1,75 @@
-<div class="container">
+<div class="container siteForm">
+  <h3>Create a new fishing spot</h3>
   <form method="POST" action="/places" enctype="multipart/form-data">
-    <div>
+    <div class="form-group">
       <label for="name">Name</label>
-      <input type="text" name="name" id="name">
+      <input type="text" name="name" id="name" class="form-control">
     </div>
-    <div>
+    <div class="form-group">
       <label for="region">Region</label>
-      <input type="text" name="region" id="region">
+      <select name="region" id="region" class="form-control">
+        <option value="location" selected disabled="">Choose a location</option>
+        <option value="North East">North East</option>
+        <option value="North West">North West</option>
+        <option value="Yorkshire">Yorkshire</option>
+        <option value="East Midlands">East Midlands</option>
+        <option value="West Midlands">West Midlands</option>
+        <option value="London">London</option>
+        <option value="East England">East England</option>
+        <option value="South East">South East</option>
+        <option value="South West">South West</option>
+        <option value="Wales">Wales</option>
+      </select>
     </div>
-    <div>
+    <div class="form-group">
       <label for="licence">Licence required?</label>
-      <input type="text" name="licence" id="licence">
+      <select name="licence" id="licence" class="form-control">
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
     </div>
-    <div>
+    <div class="form-group">
       <label for="rating">Rating</label>
-      <input type="number" name="rating" id="rating">
+      <select name="rating" id="rating" class="form-control">
+        <option value=1>1</option>
+        <option value=2>2</option>
+        <option value=3>3</option>
+        <option value=4>4</option>
+        <option value=5>5</option>
+      </select>
     </div>
-    <div>
-      <label for="keywords">Keywords</label>
-      <input type="text" name="keywords" id="keywords">
+    <div class="form-group">
+      <label for="keywords">Type of fishing (eg- River, lake)</label>
+      <input type="text" name="keywords" id="keywords" class="form-control">
     </div>
-    <div>
+    <div class="form-group">
       <label for="price">Price (if applicable)</label>
-      <input type="number" name="price" id="price">
+      <input type="number" name="price" id="price" class="form-control">
     </div>
-    <div>
-      <label for="streetName">Street Name</label>
-      <input type="text" name="streetName" id="streetName">
+    <div class="form-group">
+      <label for="address">Address (Try Typing the Place Name Again)</label>
+      <input type="text" name="address" id="address" class="autocomplete form-control">
+      <input type="hidden" name = "lat" id="lat">
+      <input type="hidden" name = "lng" id="lng">
     </div>
-    <div>
-      <label for="postCode">Post Code</label>
-      <input type="text" name="postCode" id="postCode">
+    <div class="form-group">
+      <label for="postCode">Post Code(required)</label>
+      <input type="text" name="postCode" id="postCode" class="form-control">
     </div>
-    <div>
-      <label for="image">Cover Photo</label>
-      <input type="file" name="image" id="image">
+    <div class="form-group">
+      <label for="telephone">Telephone Number</label>
+      <input type="text" name="telephone" id="telephone" class="form-control">
     </div>
-    <div>
+    <div class="form-group">
+      <label for="image">Cover Photo - Click box below to upload!</label>
+      <div class="fileBox">
+        <input type="file" name="image" id="image" class="form-control seeThrough">
+      </div>
+    </div>
+    <div class="form-group">
       <label for="description">Description</label>
-      <input type="textarea" name="description" id="description">
+      <input type="textarea" name="description" id="description" class="form-control">
     </div>
-    <button class="btn btn-success find">Add Location!</button>
+    <button class="btn">Add Location!</button>
   </form>
 </div>

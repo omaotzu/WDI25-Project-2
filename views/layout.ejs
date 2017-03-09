@@ -3,11 +3,13 @@
   <% include ./partials/_scripts %>
   <body>
     <% include ./partials/_navbar %>
-    <% for(const type in messages) { %>
-      <div class="<%= type %>">
-        <h5><%= messages[type] %></h5>
-      </div>
-    <% } %>
+    <div class="container">
+      <% for(const type in messages) { %>
+        <div id="flash"class="<%= type %>">
+          <h5><%= messages[type] %></h5>
+        </div>
+      <% } %>
+    </div>
     <main>
       <%- body %>
     </main>
