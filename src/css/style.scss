@@ -46,7 +46,7 @@ nav{
 
 #homePage {
   height: 100vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../images/homePagePhoto.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('https://s3-eu-west-1.amazonaws.com/wdi-london-express-project2/homepagePhoto.jpg');
 
   background-position: center;
   background-size: cover;
@@ -169,6 +169,13 @@ nav{
    background-color: grey;
    margin: 0 auto;
 }
+.navigation{
+  margin-bottom: 50px;
+}
+
+#routeForm {
+  margin-top: 10px;
+}
 //------------------------------Site Forms -----------------------------//
 
 .siteForm {
@@ -204,6 +211,7 @@ nav{
 
 .profileInfo {
   margin-top: 10px;
+  padding-top: 20px;
 }
 
 //---------------------------------Generic ----------------------------------//
