@@ -125,7 +125,7 @@ $(function () {
 
   function getWeather(){
     $('ul#info').empty();
-    $.get(`http://api.wunderground.com/api/e32e9863eea8648e/conditions/geolookup/q/${tripPlan.lat},${tripPlan.lng}.json`)
+    $.get(`https://api.wunderground.com/api/e32e9863eea8648e/conditions/geolookup/q/${tripPlan.lat},${tripPlan.lng}.json`)
     .done((data) => {
       $('ul#info').prepend(`
         <li> Current temperature - <em>${data.current_observation.temp_c}&deg;C</em></li>

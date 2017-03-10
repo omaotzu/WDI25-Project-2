@@ -122,7 +122,7 @@ $(function () {
 
   function getWeather() {
     $('ul#info').empty();
-    $.get('http://api.wunderground.com/api/e32e9863eea8648e/conditions/geolookup/q/' + tripPlan.lat + ',' + tripPlan.lng + '.json').done(function (data) {
+    $.get('https://api.wunderground.com/api/e32e9863eea8648e/conditions/geolookup/q/' + tripPlan.lat + ',' + tripPlan.lng + '.json').done(function (data) {
       $('ul#info').prepend('\n        <li> Current temperature - <em>' + data.current_observation.temp_c + '&deg;C</em></li>\n        <li> Real feel           - <em>' + data.current_observation.feelslike_c + '&deg;C</em></li>\n        <li> Current weather     - <em>' + data.current_observation.weather + '</em></li>\n        <li> Visibility          - <em>' + data.current_observation.visibility_mi + ' Miles</em></li>\n        <li> Windspeed           - <em>' + data.current_observation.wind_mph + ' Mph</em></li>\n        <li> For more weather info - <a href ="' + data.current_observation.forecast_url + '">Click Here!!</a></li>\n      ');
     });
   }
