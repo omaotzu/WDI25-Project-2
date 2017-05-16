@@ -180,7 +180,7 @@ function createImageCommentRoute(req, res, next) {
     .then((place) => {
       if(!place) return res.notFound();
       const picture = place.pictures.id(req.params.imageId);
-      console.log(req.params.imageId);
+      // console.log(req.params.imageId);
       picture.icomments.push(req.body);
 
       return place.save();
