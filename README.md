@@ -22,6 +22,10 @@ Alongside this I maniuplate the Wunderground Weather App and Google Maps API to 
 
 ![](./screenshots/FishBook_img2.png)
 
+
+##Technologies Used
+
+
 JavaScript, jQuery, SCSS, HTML, Express.js, Node.js, MongoDB, Mongoose, Bcrypt, AJAX, JSON, AWS, Google Maps API, Wunderground Weather API, Bootstrapand  Gulp were used to create this game.
 
 ![](./screenshots/FishBook_img3.png)
